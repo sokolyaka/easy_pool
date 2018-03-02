@@ -1,14 +1,27 @@
 buildscript {
     ext.kotlin_version = '1.2.10'
+    ext.bintray_version = '1.7.3'
+
 
     repositories {
         mavenCentral()
+        jcenter()
     }
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintray_version"
     }
 }
 apply plugin: 'kotlin-platform-jvm'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+
+group 'com.github.sokolyaka'
+
+version '1.1'
+
+sourceCompatibility = 1.6
 
 repositories {
     mavenCentral()
@@ -20,4 +33,51 @@ dependencies {
     testCompile "junit:junit:4.12"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+}
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    publications = ['mavenJava']
+    pkg {
+        repo = 'maven'
+        name = 'easypool'
+        desc = 'Easy realization of the Pool pattern.'
+        websiteUrl = 'https://github.com/sokolyaka/easy_pool'
+        vcsUrl = 'https://github.com/sokolyaka/easy_pool.git'
+        licenses = ["Apache-2.0"]
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            desc = 'Easy realization of the Pool pattern.'
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = properties.getProperty("bintray.gpg.password")
+                //Optional. The passphrase for GPG signing'
+            }
+        }
+    }
+}
+task sourcesJar(type: Jar, dependsOn: project.classes) {
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: project.javadoc) {
+    from javadoc.destinationDir
+}
+artifacts { archives sourcesJar, javadocJar }
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId project.bintray.pkg.name
+            from components.java
+            artifact sourcesJar {
+                classifier = 'sources'
+            }
+            artifact javadocJar {
+                classifier = 'javadoc'
+            }
+        }
+    }
 }
