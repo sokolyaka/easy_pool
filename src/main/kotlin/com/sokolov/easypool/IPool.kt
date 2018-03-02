@@ -1,3 +1,5 @@
+package com.sokolov.easypool
+
 interface IPool<E> {
 
     /**

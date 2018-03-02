@@ -1,3 +1,5 @@
+package com.sokolov.easypool
+
 import java.util.*
 
 class Pool<E>(val pool: Queue<E>, initSize: Int, val eBuilder: INewElementBuilder<E>, val eCleaner: IElementCleaner<E>) : IPool<E> {

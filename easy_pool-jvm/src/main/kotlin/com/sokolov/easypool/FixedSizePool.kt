@@ -1,3 +1,5 @@
+package com.sokolov.easypool
+
 /**
  * The pool returns as many elements as polled,
  * but accepts back only a fixed count
