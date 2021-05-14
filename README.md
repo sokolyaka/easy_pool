@@ -3,12 +3,14 @@ Easy realization of [the Object Pool pattern](https://en.wikipedia.org/wiki/Obje
 
 ```gradle
 repositories {
-    jcenter()
+    maven {
+            url = "https://maven.pkg.github.com/sokolyaka/easy_pool"
+        }
 }
 ```
 
 ```gradle
 dependencies {
-    compile 'com.github.sokolyaka:easypool:1.1'
+    implementation 'com.github.sokolyaka:easypool:1.1'
 }
 ```
